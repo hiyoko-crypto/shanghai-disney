@@ -209,7 +209,6 @@
     margin-top:-2px;
   }
   .empty-msg{ text-align:center; color:var(--gray); font-size:.85rem; padding:24px 0;}
-  footer{ text-align:center; font-size:.7rem; color:var(--gray); padding:14px; }
 </style>
 </head>
 <body>
@@ -251,30 +250,6 @@
 
   <!-- TAB2: 時間帯攻略 -->
   <section id="tab2" class="panel">
-    <div class="info-box">
-      <h4>🎫 スタンバイパス・DPAってなに？</h4>
-      TRON・Soaring・Pirates・七人のこびとのマイントレイン・ロアリングラピッド・ズートピア：ホット・パースートあたりが、無料の「スタンバイパス」（整理券）や有料の「DPA（Disney Premier Access）」の対象になりやすい人気アトラクションです。
-      <ul style="margin:8px 0 0; padding-left:18px;">
-        <li><b>スタンバイパス（無料）</b>：公式アプリで<b>入園後すぐに1枚目を取得</b>するのが基本（開園と同時に争奪戦になりやすい）。指定時間枠に専用列へ。1枚使用後 or 一定時間経過後に次の1枚を再取得できる</li>
-        <li><b>DPA（有料・1回ごとに課金）</b>：時間指定で優先レーンに並べる。人気ライドは早い時間帯に売り切れることもある</li>
-        <li>その日にどのアトラクションがスタンバイパス／DPA対象になるかは<b>公式アプリで当日発表</b>される。ここに挙げた候補はあくまで「対象になりやすい常連組」で、確定情報ではない</li>
-        <li>当日は公式アプリの案内が最新・最優先。本しおりの情報は目安として活用を</li>
-      </ul>
-    </div>
-
-    <p class="note">⭐ = 特におすすめ・見逃したくない注目のアトラクション</p>
-
-    <p class="note">↓ 下の「1時間ごとの平均待ち時間」表について、26アトラクションの実測値を時間帯ごとに平均してみたところ、想定していた「朝・昼・夕方・夜」の4段階ではなく、実際には次の3つの塊（クラスター）でした。区分自体をこれに合わせて引き直しています。</p>
-    <div class="info-box info-box-blue">
-      <h4>📈 実測でわかった全体の混雑カーブ</h4>
-      <ul style="margin:8px 0 0; padding-left:18px;">
-        <li><b>8:00〜9:00台：平均約10分</b> — 唯一はっきり空いている時間帯</li>
-        <li><b>9:00〜11:00台：平均19→26分</b> — 急上昇する過渡期</li>
-        <li><b>11:00〜20:00台：平均26〜30分でほぼ横ばい</b> — 「昼」「夕方」「夜（〜20時）」で実はほとんど差がない、1日の大半を占める混雑プラトー</li>
-        <li><b>20:00〜21:00台：平均約21分</b> — ここで初めてはっきり下がる</li>
-      </ul>
-    </div>
-
     <div class="section-title">🌅 開園〜9:00頃：本当に空いている時間</div>
     <div class="time-block">
       <h4>🚀 最優先ターゲット（ピーク時<span id="tierTopCutoff"></span>分以上・ここで潰さないと1日中高止まり）</h4>
@@ -309,9 +284,6 @@
     <div class="section-title">📊 1時間ごとの平均待ち時間の目安</div>
     <div class="congestion-scroll"><table class="congestion" id="congestionTable"></table></div>
     <p class="note">← 横にスクロールできます</p>
-    <p class="note">
-      ※上の表の数値は<a href="https://urtrip.jp/shanghai-disneyland-attraction-waitingtime-data/" target="_blank" rel="noopener">こちらの待ち時間データ記事</a>（urtrip.jpが実際に計測・収集した15分刻みの待ち時間データ）を集計元とした実測ベースの数値です。各アトラクションについて、直近の記録日の15分刻みの実測待ち時間（分）を時間帯ごとに平均し、四捨五入して掲載しています。同記事でまったく追跡されていないアトラクション（体験展示・散策エリアなど）はこの表自体に載せていません。「－」は、データはあるものの一部の時間帯だけ記録がない場合の空欄です。また、実測値といっても過去の記録・来園者コミュニティによる集計の平均であり、当日の混雑を保証するものではありません。当日の実際の混雑・運営状況は公式アプリで確認してください。色分け（緑／黄／赤）は全アトラクション共通の基準で、<span id="cutoffLegend"></span>としています。また、上海ディズニーランドの開園時刻は日によって8:00・8:30・9:00などとばらつきがあるため、「8-9」の時間帯は日によっては開園直後・開園前の状態が混ざって反映されている可能性があり、その意味でもあくまで目安として見てください。
-    </p>
   </section>
 
   <!-- TAB3: スケジュール表（予定＋実績統合） -->
@@ -332,7 +304,6 @@
 
 </main>
 
-<footer>上海ディズニーランド攻略しおり ｜ オフライン対応・端末内保存</footer>
 
 <script>
 (function(){
@@ -565,6 +536,35 @@
     congestionTable.innerHTML = html;
   }
   renderCongestion();
+
+  // ---------- タブ2: 時間帯タイル（開園〜9:00 / 9:00〜11:00 / いつ行ってもOK） ----------
+  // CONGESTION.rows から導出するので、待ち時間データを直しても手直し不要
+  const TIER_CUTOFFS = { top: 60, mid: 25 };
+  function peakOf(minutes){
+    const vals = minutes.filter(m=>m!==null);
+    return vals.length ? Math.max(...vals) : null;
+  }
+  function renderTimeTiers(){
+    const rows = CONGESTION.rows.map(r=>({ ...r, peak: peakOf(r.minutes) }));
+    const top = rows.filter(r=> r.peak!==null && r.peak>=TIER_CUTOFFS.top);
+    const mid = rows.filter(r=> r.peak!==null && r.peak>=TIER_CUTOFFS.mid && r.peak<TIER_CUTOFFS.top);
+    const any = rows.filter(r=> r.peak===null || r.peak<TIER_CUTOFFS.mid);
+    const byStarThenPeakDesc = (a,b)=> (b.star-a.star) || ((b.peak??-1)-(a.peak??-1));
+    [top, mid, any].forEach(list=>list.sort(byStarThenPeakDesc));
+
+    const li = r=>{
+      const label = r.peak===null ? "データなし・ウォークスルー系" : `ピーク時${r.peak}分${r.tip?"・"+r.tip:""}`;
+      return `<li>${r.star?"⭐ ":""}${r.name}（${label}）</li>`;
+    };
+    document.getElementById("tierTopList").innerHTML = top.map(li).join("");
+    document.getElementById("tierMidList").innerHTML = mid.map(li).join("");
+    document.getElementById("tierAnyList").innerHTML = any.map(li).join("");
+    document.getElementById("tierTopCutoff").textContent = TIER_CUTOFFS.top;
+    document.getElementById("tierMidCutoff").textContent = `${TIER_CUTOFFS.mid}〜${TIER_CUTOFFS.top-1}`;
+    document.getElementById("tierAnyCutoff").textContent = TIER_CUTOFFS.mid;
+    document.getElementById("tierAnyTitle").textContent = `🕐 いつ行ってもOK（時間帯を気にしなくて良い${any.length}件）`;
+  }
+  renderTimeTiers();
 
   // ---------- タブ3: スケジュール表 ----------
   const scheduleBody = document.getElementById("scheduleBody");
