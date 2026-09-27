@@ -249,37 +249,6 @@
 
   <!-- TAB2: 時間帯攻略 -->
   <section id="tab2" class="panel">
-    <p class="note">📐 このタブの待ち時間は、記録時点（9月下旬）の実測データを混雑指数33%相当と仮定し、11/6(金)の予想混雑指数57%（<a href="https://magic-tips.app/ja/konzatsu-calendar/shanghai-disney-resort/2026/11" target="_blank" rel="noopener">Magic Tips</a>調べ）に合わせて全体を57÷33倍にスケーリングした推定値です。実測ではなくあくまで概算なので、目安として見てください。</p>
-
-    <div class="section-title">🌅 開園〜9:00頃：本当に空いている時間</div>
-    <div class="time-block">
-      <h4>🚀 最優先ターゲット（ピーク時<span id="tierTopCutoff"></span>分以上・ここで潰さないと1日中高止まり）</h4>
-      <ul id="tierTopList"></ul>
-    </div>
-
-    <div class="section-title">☀️ 9:00〜11:00頃：混雑が急上昇する過渡期</div>
-    <div class="time-block">
-      <h4>🎢 ピーク時<span id="tierMidCutoff"></span>分・プラトー入り前に片付けておきたい</h4>
-      <ul id="tierMidList"></ul>
-    </div>
-
-    <div class="section-title">🌙 20:00頃以降：ここでようやく空き始める</div>
-    <div class="time-block">
-      <h4>✨ 閉園に向けて下がる時間帯</h4>
-      <ul>
-        <li>19-20時台→20-21時台にかけて下がり始める（トロンで149→95分、七人のこびとで109→85分など）</li>
-        <li>日中混んでいた人気ライドの再チャレンジ枠</li>
-        <li>ライトアップされたお城・パーク全体の雰囲気</li>
-        <li>花火・ナイトショー鑑賞のためのエリア確保</li>
-      </ul>
-    </div>
-
-    <div class="section-title" id="tierAnyTitle">🕐 いつ行ってもOK</div>
-    <div class="time-block">
-      <h4>😌 ピーク時でも<span id="tierAnyCutoff"></span>分未満・実測ではほぼ終日フラット。上の4区分とは別枠で、朝イチでも夜でも空いてるタイミングに挟み込んでOK</h4>
-      <ul id="tierAnyList"></ul>
-    </div>
-
     <div class="section-title">📊 1時間ごとの平均待ち時間の目安</div>
     <div class="congestion-scroll"><table class="congestion" id="congestionTable"></table></div>
     <p class="note">← 横にスクロールできます</p>
@@ -510,10 +479,10 @@
         <div class="card-body">
           <div class="card-head">
             <h4><a href="${attractionUrl(a)}" target="_blank" rel="noopener">${a.name}</a></h4>
-            <span class="badge">${a.area}</span>
           </div>
           <div class="card-meta">
             <span class="chip chip-${a.type}">${TYPE_ICON[a.type]} ${a.type}</span>
+            <span class="badge">${a.area}</span>
             ${a.type==="レストラン" ? `<span class="chip">💰 ${a.budget}</span><span class="chip">🍴 ${a.genre}</span>` : ""}
             ${a.type==="ショー" ? `<span class="chip">🕒 ${a.showtime}</span>` : ""}
           </div>
@@ -545,35 +514,6 @@
     congestionTable.innerHTML = html;
   }
   renderCongestion();
-
-  // ---------- タブ2: 時間帯タイル（開園〜9:00 / 9:00〜11:00 / いつ行ってもOK） ----------
-  // CONGESTION.rows から導出するので、待ち時間データを直しても手直し不要
-  const TIER_CUTOFFS = { top: 60, mid: 25 };
-  function peakOf(minutes){
-    const vals = minutes.filter(m=>m!==null);
-    return vals.length ? Math.max(...vals) : null;
-  }
-  function renderTimeTiers(){
-    const rows = CONGESTION.rows.map(r=>({ ...r, peak: peakOf(r.minutes) }));
-    const top = rows.filter(r=> r.peak!==null && r.peak>=TIER_CUTOFFS.top);
-    const mid = rows.filter(r=> r.peak!==null && r.peak>=TIER_CUTOFFS.mid && r.peak<TIER_CUTOFFS.top);
-    const any = rows.filter(r=> r.peak===null || r.peak<TIER_CUTOFFS.mid);
-    const byStarThenPeakDesc = (a,b)=> (b.star-a.star) || ((b.peak??-1)-(a.peak??-1));
-    [top, mid, any].forEach(list=>list.sort(byStarThenPeakDesc));
-
-    const li = r=>{
-      const label = r.peak===null ? "データなし・ウォークスルー系" : `ピーク時${r.peak}分${r.tip?"・"+r.tip:""}`;
-      return `<li>${r.star?"⭐ ":""}${r.name}（${label}）</li>`;
-    };
-    document.getElementById("tierTopList").innerHTML = top.map(li).join("");
-    document.getElementById("tierMidList").innerHTML = mid.map(li).join("");
-    document.getElementById("tierAnyList").innerHTML = any.map(li).join("");
-    document.getElementById("tierTopCutoff").textContent = TIER_CUTOFFS.top;
-    document.getElementById("tierMidCutoff").textContent = `${TIER_CUTOFFS.mid}〜${TIER_CUTOFFS.top-1}`;
-    document.getElementById("tierAnyCutoff").textContent = TIER_CUTOFFS.mid;
-    document.getElementById("tierAnyTitle").textContent = `🕐 いつ行ってもOK（時間帯を気にしなくて良い${any.length}件）`;
-  }
-  renderTimeTiers();
 
 })();
 </script>
