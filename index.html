@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>上海ディズニーランド 攻略しおり</title>
+<style>
+  :root{
+    --blue-deep:#0b3d91;
+    --blue:#1a56c9;
+    --blue-light:#4d8fe6;
+    --blue-pale:#eaf2ff;
+    --yellow:#ffd23f;
+    --yellow-deep:#f5a623;
+    --pink:#ff6f91;
+    --green:#3cb371;
+    --gray:#6b7280;
+    --bg:#f4f7ff;
+    --card:#ffffff;
+    --text:#1f2937;
+    --radius:16px;
+    --shadow-card:0 3px 10px rgba(11,61,145,.08);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+    background:linear-gradient(180deg,var(--blue-pale) 0%, var(--bg) 220px);
+    color:var(--text);
+    padding-bottom:80px;
+  }
+  header{
+    background:linear-gradient(135deg,var(--blue-deep),var(--blue));
+    color:#fff;
+    padding:18px 16px 14px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  header .stars{
+    position:absolute; inset:0;
+    font-size:20px; opacity:.25;
+    display:flex; justify-content:space-around; align-items:center;
+    pointer-events:none;
+  }
+  header h1{
+    margin:0; font-size:1.25rem; letter-spacing:.02em;
+    position:relative;
+  }
+  header p{
+    margin:4px 0 0; font-size:.78rem; opacity:.9; position:relative;
+  }
+  nav.tabs{
+    display:flex; gap:6px;
+    padding:10px 10px 0;
+    position:sticky; top:0; z-index:20;
+    background:var(--bg);
+    box-shadow:0 4px 10px rgba(11,61,145,.06);
+  }
+  nav.tabs button{
+    flex:1;
+    border:none;
+    background:#dde7fb;
+    color:var(--blue-deep);
+    font-weight:700;
+    font-size:.82rem;
+    padding:10px 4px;
+    border-radius:12px 12px 0 0;
+    cursor:pointer;
+    transition:.15s;
+  }
+  nav.tabs button.active{
+    background:var(--card);
+    color:var(--blue);
+    box-shadow:0 -2px 0 var(--yellow) inset;
+  }
+  main{ padding:14px; max-width:640px; margin:0 auto; }
+  section.panel{ display:none; }
+  section.panel.active{ display:block; animation:fade .2s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .filters{
+    display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; margin-bottom:12px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .filters select{
+    flex:1; min-width:120px;
+    padding:9px 10px; border-radius:10px; border:1px solid #cdd9f2;
+    background:#fff; font-size:.85rem; color:var(--text);
+  }
+
+  .map{
+    background:var(--card); border-radius:var(--radius); padding:14px;
+    margin-bottom:14px; box-shadow:var(--shadow-card);
+  }
+  .map h3{ margin:0 0 10px; font-size:.9rem; color:var(--blue-deep); }
+  .park-map-img{
+    display:block; width:100%; height:auto; border-radius:10px;
+  }
+
+  .card{
+    background:var(--card); border-radius:var(--radius); padding:12px;
+    margin-bottom:12px; box-shadow:var(--shadow-card);
+    border-left:6px solid var(--yellow);
+    display:flex; gap:12px; align-items:center;
+  }
+  .card-thumb{
+    width:64px; height:64px; flex:none; border-radius:12px; overflow:hidden;
+    background:var(--blue-pale); display:flex; align-items:center; justify-content:center;
+    font-size:1.9rem;
+  }
+  .card-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .card-body{ flex:1; min-width:0; }
+  .card-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .card-head h4{ margin:0; font-size:.95rem; color:var(--blue-deep); }
+  .card-head h4 a{ color:inherit; text-decoration:none; border-bottom:1px dashed var(--blue-light); }
+  .card-head h4 a:active{ opacity:.7; }
+  .badge{
+    font-size:.66rem; font-weight:700; padding:3px 8px; border-radius:999px;
+    background:var(--blue-pale); color:var(--blue); white-space:nowrap;
+  }
+  .card-meta{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .chip{
+    font-size:.7rem; background:#f1f4fa; color:var(--gray); padding:3px 9px; border-radius:999px;
+    display:flex; align-items:center; gap:4px;
+  }
+  .chip-ライド{ background:#e6eeff; color:var(--blue); }
+  .chip-ショー{ background:#ffe9f0; color:var(--pink); }
+  .chip-レストラン{ background:#fff3d6; color:var(--yellow-deep); }
+
+  .section-title{
+    font-size:1rem; color:var(--blue-deep); margin:18px 0 8px; font-weight:800;
+    display:flex; align-items:center; gap:6px;
+  }
+  .time-block{
+    background:var(--card); border-radius:var(--radius); padding:14px; margin-bottom:12px;
+    box-shadow:var(--shadow-card);
+  }
+  .time-block h4{ margin:0 0 8px; font-size:.92rem; color:var(--blue); display:flex; gap:6px; align-items:center;}
+  .time-block ul{ margin:0; padding-left:20px; font-size:.85rem; line-height:1.7; }
+
+  .info-box{
+    background:#fff8e1; border:1px solid var(--yellow); border-radius:var(--radius);
+    padding:14px; margin-bottom:14px; font-size:.83rem; line-height:1.7;
+  }
+  .info-box h4{ margin:0 0 6px; color:var(--yellow-deep); font-size:.92rem; }
+  .info-box-blue{ background:#eef4ff; border-color:var(--blue-light); }
+  .info-box-blue h4{ color:var(--blue); }
+
+  .note{ font-size:.7rem; color:var(--gray); margin:8px 0; }
+
+  .congestion-scroll{
+    overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:var(--radius);
+    box-shadow:var(--shadow-card); background:var(--card);
+  }
+  table.congestion{
+    border-collapse:collapse; font-size:.68rem; white-space:nowrap;
+  }
+  table.congestion th, table.congestion td{
+    padding:6px 7px; text-align:center; border-bottom:1px solid #eef1f8;
+  }
+  table.congestion th{ background:var(--blue); color:#fff; font-weight:700; font-size:.65rem;}
+  table.congestion td:first-child, table.congestion th:first-child{
+    text-align:left; padding-left:8px; font-weight:700; color:var(--blue-deep);
+    position:sticky; left:0; background:var(--card); white-space:normal; min-width:150px;
+  }
+  table.congestion th:first-child{ background:var(--blue); color:#fff; z-index:1; }
+  .lv1{ background:#e6f7ec; color:#1f7a45; font-weight:700;}
+  .lv2{ background:#fff6da; color:#a06a00; font-weight:700;}
+  .lv3{ background:#ffe6ea; color:#c22a4d; font-weight:700;}
+  .lv-nodata{ background:#f1f1f3; color:#9a9aa2; font-weight:400;}
+
+  .notion-table{
+    width:100%; border-collapse:collapse; background:var(--card); border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow-card);
+  }
+  .notion-table th{
+    background:var(--blue-pale); color:var(--blue-deep); font-size:.75rem; font-weight:800;
+    text-align:left; padding:9px 10px; border-bottom:1px solid #d7e4fb;
+  }
+  .notion-table th.time-col{ width:90px; }
+  .notion-table th.del-col{ width:36px; }
+  .notion-table th.drag-col{ width:28px; }
+  .notion-table td{
+    border-bottom:1px solid #eef1f8; padding:0;
+  }
+  .drag-handle{
+    cursor:grab; color:#c9d3e6; text-align:center; user-select:none;
+    display:flex; align-items:center; justify-content:center; height:100%; padding:9px 4px;
+  }
+  .drag-handle:active{ cursor:grabbing; }
+  .notion-table tr.dragging{ opacity:.4; }
+  .notion-table tr.drag-over{ box-shadow:inset 0 2px 0 var(--blue); }
+  .notion-table input{
+    width:100%; border:none; background:transparent; padding:9px 10px; font-size:.85rem;
+    font-family:inherit; color:var(--text);
+  }
+  .notion-table input:focus{ outline:2px solid var(--blue-light); outline-offset:-2px; background:#fbfdff; }
+  .notion-table tr:hover{ background:#fafbff; }
+  .del-btn{
+    border:none; background:none; color:#c9d3e6; font-size:1rem; cursor:pointer; padding:6px;
+    width:100%;
+  }
+  .del-btn:hover{ color:#c22a4d; }
+
+  .add-row-btn{
+    width:100%; padding:12px; border-radius:0 0 14px 14px; border:none; border-top:1px solid #eef1f8;
+    background:var(--blue-pale); color:var(--blue); font-weight:800; font-size:.85rem; cursor:pointer;
+    margin-top:-2px;
+  }
+  .empty-msg{ text-align:center; color:var(--gray); font-size:.85rem; padding:24px 0;}
+  footer{ text-align:center; font-size:.7rem; color:var(--gray); padding:14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="stars">✨🎆⭐🎇✨</div>
+  <h1>🏰 上海ディズニーランド 1日攻略しおり</h1>
+  <p>家族みんなでハッピーな1日を！</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="tab1">🎠 一覧</button>
+  <button class="tab-btn" data-tab="tab2">⏰ 攻略</button>
+  <button class="tab-btn" data-tab="tab3">📝 スケジュール</button>
+</nav>
+
+<main>
+
+  <!-- TAB1: アトラクション一覧 -->
+  <section id="tab1" class="panel active">
+    <div class="filters">
+      <select id="filterArea"><option value="all">エリア: すべて</option></select>
+      <select id="filterType">
+        <option value="all">種類: すべて</option>
+        <option value="ライド">🎢 ライド</option>
+        <option value="ショー">🎭 ショー</option>
+        <option value="レストラン">🍽️ レストラン</option>
+      </select>
+    </div>
+
+    <div class="map">
+      <h3>🗺️ パークマップ</h3>
+      <img class="park-map-img" src="assets/park-map.png" alt="上海ディズニーランド エリアマップ">
+    </div>
+
+    <p class="note">🕒 ショーの時刻は数日前に公開される直近日程を参考にした仮の時刻です。来園数日前に公式サイトで最新の時刻に更新してください。</p>
+    <div id="cardList"></div>
+  </section>
+
+  <!-- TAB2: 時間帯攻略 -->
+  <section id="tab2" class="panel">
+    <div class="info-box">
+      <h4>🎫 スタンバイパス・DPAってなに？</h4>
+      TRON・Soaring・Pirates・七人のこびとのマイントレイン・ロアリングラピッド・ズートピア：ホット・パースートあたりが、無料の「スタンバイパス」（整理券）や有料の「DPA（Disney Premier Access）」の対象になりやすい人気アトラクションです。
+      <ul style="margin:8px 0 0; padding-left:18px;">
+        <li><b>スタンバイパス（無料）</b>：公式アプリで<b>入園後すぐに1枚目を取得</b>するのが基本（開園と同時に争奪戦になりやすい）。指定時間枠に専用列へ。1枚使用後 or 一定時間経過後に次の1枚を再取得できる</li>
+        <li><b>DPA（有料・1回ごとに課金）</b>：時間指定で優先レーンに並べる。人気ライドは早い時間帯に売り切れることもある</li>
+        <li>その日にどのアトラクションがスタンバイパス／DPA対象になるかは<b>公式アプリで当日発表</b>される。ここに挙げた候補はあくまで「対象になりやすい常連組」で、確定情報ではない</li>
+        <li>当日は公式アプリの案内が最新・最優先。本しおりの情報は目安として活用を</li>
+      </ul>
+    </div>
+
+    <p class="note">⭐ = 特におすすめ・見逃したくない注目のアトラクション</p>
+
+    <p class="note">↓ 下の「1時間ごとの平均待ち時間」表について、26アトラクションの実測値を時間帯ごとに平均してみたところ、想定していた「朝・昼・夕方・夜」の4段階ではなく、実際には次の3つの塊（クラスター）でした。区分自体をこれに合わせて引き直しています。</p>
+    <div class="info-box info-box-blue">
+      <h4>📈 実測でわかった全体の混雑カーブ</h4>
+      <ul style="margin:8px 0 0; padding-left:18px;">
+        <li><b>8:00〜9:00台：平均約10分</b> — 唯一はっきり空いている時間帯</li>
+        <li><b>9:00〜11:00台：平均19→26分</b> — 急上昇する過渡期</li>
+        <li><b>11:00〜20:00台：平均26〜30分でほぼ横ばい</b> — 「昼」「夕方」「夜（〜20時）」で実はほとんど差がない、1日の大半を占める混雑プラトー</li>
+        <li><b>20:00〜21:00台：平均約21分</b> — ここで初めてはっきり下がる</li>
+      </ul>
+    </div>
+
+    <div class="section-title">🌅 開園〜9:00頃：本当に空いている時間</div>
+    <div class="time-block">
+      <h4>🚀 最優先ターゲット（ピーク時<span id="tierTopCutoff"></span>分以上・ここで潰さないと1日中高止まり）</h4>
+      <ul id="tierTopList"></ul>
+    </div>
+
+    <div class="section-title">☀️ 9:00〜11:00頃：混雑が急上昇する過渡期</div>
+    <div class="time-block">
+      <h4>🎢 ピーク時<span id="tierMidCutoff"></span>分・プラトー入り前に片付けておきたい</h4>
+      <ul id="tierMidList"></ul>
+    </div>
+
+    <p class="note">※「最優先ターゲット」「9:00〜11:00」の項目も、実測では18〜19時台まで高止まりが続き、11:00〜20:00の間ずっと混み続けます。「夕方の方が空く」というのは実測上は誤りでした。</p>
+
+    <div class="section-title">🌙 20:00頃以降：ここでようやく空き始める</div>
+    <div class="time-block">
+      <h4>✨ 閉園に向けて下がる時間帯</h4>
+      <ul>
+        <li>実測では20時台に入ってようやく平均待ち時間が下がり始める（トロンで86→55分、七人のこびとで63→49分など）</li>
+        <li>日中混んでいた人気ライドの再チャレンジ枠</li>
+        <li>ライトアップされたお城・パーク全体の雰囲気</li>
+        <li>花火・ナイトショー鑑賞のためのエリア確保</li>
+      </ul>
+    </div>
+
+    <div class="section-title" id="tierAnyTitle">🕐 いつ行ってもOK</div>
+    <div class="time-block">
+      <h4>😌 ピーク時でも<span id="tierAnyCutoff"></span>分未満・実測ではほぼ終日フラット。上の4区分とは別枠で、朝イチでも夜でも空いてるタイミングに挟み込んでOK</h4>
+      <ul id="tierAnyList"></ul>
+    </div>
+
+    <div class="section-title">📊 1時間ごとの平均待ち時間の目安</div>
+    <div class="congestion-scroll"><table class="congestion" id="congestionTable"></table></div>
+    <p class="note">← 横にスクロールできます</p>
+    <p class="note">
+      ※上の表の数値は<a href="https://urtrip.jp/shanghai-disneyland-attraction-waitingtime-data/" target="_blank" rel="noopener">こちらの待ち時間データ記事</a>（urtrip.jpが実際に計測・収集した15分刻みの待ち時間データ）を集計元とした実測ベースの数値です。各アトラクションについて、直近の記録日の15分刻みの実測待ち時間（分）を時間帯ごとに平均し、四捨五入して掲載しています。同記事でまったく追跡されていないアトラクション（体験展示・散策エリアなど）はこの表自体に載せていません。「－」は、データはあるものの一部の時間帯だけ記録がない場合の空欄です。また、実測値といっても過去の記録・来園者コミュニティによる集計の平均であり、当日の混雑を保証するものではありません。当日の実際の混雑・運営状況は公式アプリで確認してください。色分け（緑／黄／赤）は全アトラクション共通の基準で、<span id="cutoffLegend"></span>としています。また、上海ディズニーランドの開園時刻は日によって8:00・8:30・9:00などとばらつきがあるため、「8-9」の時間帯は日によっては開園直後・開園前の状態が混ざって反映されている可能性があり、その意味でもあくまで目安として見てください。
+    </p>
+  </section>
+
+  <!-- TAB3: スケジュール表（予定＋実績統合） -->
+  <section id="tab3" class="panel">
+    <table class="notion-table">
+      <thead>
+        <tr>
+          <th class="drag-col"></th>
+          <th class="time-col">時刻</th>
+          <th>アトラクション</th>
+          <th class="del-col"></th>
+        </tr>
+      </thead>
+      <tbody id="scheduleBody"></tbody>
+    </table>
+    <button class="add-row-btn" id="addRowBtn">＋ 行を追加</button>
+  </section>
+
+</main>
+
+<footer>上海ディズニーランド攻略しおり ｜ オフライン対応・端末内保存</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- データ定義 ----------
+  const SITE = "https://www.shanghaidisneyresort.com/en/experience";
+  const ATTRACTIONS = [
+    // ---- ライド ----
+    { type:"ライド", name:"トロン・ライトサイクル・パワー・ラン", area:"トゥモローランド", icon:"🏍️", slug:"tron-lightcycle-power-run" },
+    { type:"ライド", name:"バズ・ライトイヤー・プラネット・レスキュー", area:"トゥモローランド", icon:"🚀", slug:"buzz-lightyear-planet-rescue" },
+    { type:"ライド", name:"ジェットパックス", area:"トゥモローランド", icon:"🚁", slug:"jet-packs" },
+    { type:"ライド", name:"ピクサー・ワンダリング・ジャーニー（体験展示）", area:"トゥモローランド", icon:"🎨", slug:"pixar-adventurous-journey-tomorrowland" },
+    { type:"ライド", name:"ソアリン・オーバー・ザ・ホライズン", area:"アドベンチャーアイル", icon:"🪂", slug:"soaring-over-horizon" },
+    { type:"ライド", name:"ロアリング・ラピッド", area:"アドベンチャーアイル", icon:"🌊", slug:"roaring-rapids" },
+    { type:"ライド", name:"エクスプローラーズ・キャンプ ロープチャレンジ", area:"アドベンチャーアイル", icon:"🧗", slug:"challenge-trails" },
+    { type:"ライド", name:"カリブの海賊：バトル・フォー・ザ・サンケン・トレジャー", area:"トレジャーコーブ", icon:"🏴‍☠️", slug:"pirates-of-caribbean" },
+    { type:"ライド", name:"エクスプローラーズ・カヌー", area:"トレジャーコーブ", icon:"🛶", slug:"explorer-canoes" },
+    { type:"ライド", name:"七人のこびとのマイントレイン", area:"ファンタジーランド", icon:"⛏️", slug:"seven-dwarfs-mine-train" },
+    { type:"ライド", name:"ピーターパン空の旅", area:"ファンタジーランド", icon:"🧚", slug:"peter-pans-flight" },
+    { type:"ライド", name:"くまのプーさんの冒険", area:"ファンタジーランド", icon:"🍯", slug:"adventures-winnie-pooh" },
+    { type:"ライド", name:"晶彩奇航（ヴォヤッジ・トゥ・ザ・クリスタル・グロット）", area:"ファンタジーランド", icon:"⛵", slug:"voyage-to-crystal-grotto" },
+    { type:"ライド", name:"ハニーポット・スピン", area:"ファンタジーランド", icon:"🍯", slug:"hunny-pot-spin" },
+    { type:"ライド", name:"スリンキー・ドッグ・スピン", area:"トイストーリーランド", icon:"🐶", slug:"slinky-dog-spin" },
+    { type:"ライド", name:"レックスのレーサー（RCレーサー）", area:"トイストーリーランド", icon:"🏎️", slug:"rexs-rc-racer" },
+    { type:"ライド", name:"ウッディのラウンドアップ", area:"トイストーリーランド", icon:"🤠", slug:"woodys-round-up" },
+    { type:"ライド", name:"ズートピア：ホット・パースート", area:"ズートピア", icon:"🚓", slug:"zootopia-hot-pursuit" },
+    { type:"ライド", name:"空飛ぶダンボ", area:"ガーデンズオブイマジネーション", icon:"🐘", slug:"dumbo-flying-elephant" },
+    { type:"ライド", name:"ファンタジア・カルーセル", area:"ガーデンズオブイマジネーション", icon:"🎠", slug:"fantasia-carousel" },
+    { type:"ライド", name:"スペースチャット・ウィズ・スティッチ", area:"トゥモローランド", icon:"👽", slug:"space-chat-with-stitch" },
+    { type:"ライド", name:"トロン・レルム（デジタルチャレンジ）", area:"トゥモローランド", icon:"💻", slug:"tron-realm" },
+    { type:"ライド", name:"マーベル・ユニバース", area:"ガーデンズオブイマジネーション", icon:"🦸", slug:"marvel-universe" },
+    { type:"ライド", name:"ビカム・アイアンマン（マーベル・ユニバース内）", area:"ガーデンズオブイマジネーション", icon:"🤖", slug:"become-iron-man" },
+    { type:"ライド", name:"サイレンズ・リベンジ（難破船探検）", area:"トレジャーコーブ", icon:"🚢", slug:"sirens-revenge" },
+    { type:"ライド", name:"シップレック・ショア（水遊び場）", area:"トレジャーコーブ", icon:"💦", slug:"shipwreck-shore" },
+    { type:"ライド", name:"ジュニア・エクスプローラーズ・キャンプ（キッズ広場）", area:"アドベンチャーアイル", icon:"🧒", slug:"junior-explorers-camp" },
+    { type:"ライド", name:"ビスタ・トレイル（散策路）", area:"アドベンチャーアイル", icon:"🥾", slug:"vista-trail" },
+    { type:"ライド", name:"ワンス・アポン・ア・タイム・アドベンチャー", area:"ファンタジーランド", icon:"📚", slug:"once-upon-time-adventure" },
+    { type:"ライド", name:"エンチャンテッド・ストーリーブック・キャッスル（お城内見学）", area:"ファンタジーランド", icon:"🏰", slug:"enchanted-storybook-castle" },
+    { type:"ライド", name:"アリス・イン・ワンダーランド・メイズ", area:"ファンタジーランド", icon:"🃏", slug:"alice-wonderland-maze" },
+    // ---- ショー（常設の大型ショー・パレードのみ。大道芸・アンビエント演奏・小規模グリーティングは除外） ----
+    { type:"ショー", name:"ハート・オブ・マジック（キャッスルショー）", area:"ガーデンズオブイマジネーション", icon:"🏰", cat:"entertainment", slug:"the-heart-of-magic", showtime:"9:00 / 10:25（仮）" },
+    { type:"ショー", name:"ミッキーのストーリーブック・アドベンチャー", area:"ミッキーアベニュー", icon:"📖", cat:"entertainment", slug:"mickey-storybook-adventure", showtime:"9:30〜18:40の間に9回（仮）" },
+    { type:"ショー", name:"アナと雪の女王：ア・シング・アロング・セレブレーション", area:"ファンタジーランド", icon:"❄️", cat:"entertainment", slug:"frozen-sing-along-celebration", showtime:"10:00〜18:45の間に12回（仮）" },
+    { type:"ショー", name:"アイ・オブ・ザ・ストーム：ジャック船長のスタントショー", area:"トレジャーコーブ", icon:"💥", cat:"entertainment", slug:"eye-of-storm-captain-jacks-spectacular", showtime:"10:00〜18:40の間に約15回（仮）" },
+    { type:"ショー", name:"ミッキーのストーリーブック・エクスプレス（パレード）", area:"ガーデンズオブイマジネーション", icon:"🎉", cat:"entertainment", slug:"mickeys-storybook-express", showtime:"12:15 / 15:45（仮）" },
+    { type:"ショー", name:"イルミネイト！（ナイトタイムスペクタキュラー）", area:"ガーデンズオブイマジネーション", icon:"🎆", cat:"entertainment", slug:"a-nighttime-celebration", showtime:"20:00 / 21:15（仮）" },
+    { type:"ショー", name:"ア・ヴォヤージュ・ウィズ・ダッフィー＆フレンズ", area:"ガーデンズオブイマジネーション", icon:"🧸", cat:"entertainment", slug:"a-voyage-with-duffy-and-friends", showtime:"14:00 / 15:05 / 16:35（仮）" },
+    { type:"ショー", name:"ア・パイレーツライフ・フォーユー！", area:"トレジャーコーブ", icon:"🏴‍☠️", cat:"entertainment", slug:"a-pirates-life-for-you", showtime:"14:05 / 15:25（仮）" },
+    { type:"ショー", name:"アベンジャーズ・トレーニング・イニシアチブ", area:"トゥモローランド", icon:"🦸", cat:"entertainment", slug:"avengers-training-initiative", showtime:"11:00 / 12:45 / 14:50 / 16:15（仮）" },
+    { type:"ショー", name:"ズートピア生活ショー", area:"ズートピア", icon:"🦊", cat:"entertainment", slug:"disney-zootopia-comes-alive", showtime:"時刻未定（公式サイトで直近に公開）" },
+    // ---- レストラン ----
+    { type:"レストラン", name:"老藤樹食桟", area:"ファンタジーランド", icon:"🍜", cat:"restaurant", slug:"tangled-tree-tavern", budget:"¥¥（51〜100元）", genre:"中華・軽食" },
+    { type:"レストラン", name:"皇家宴会庁", area:"ファンタジーランド", icon:"🍽️", cat:"restaurant", slug:"royal-banquet-hall", budget:"¥¥¥¥（301〜500元）", genre:"洋食・キャラクターダイニング" },
+    { type:"レストラン", name:"星露台レストラン", area:"トゥモローランド", icon:"🍔", cat:"restaurant", slug:"stargazer-grill", budget:"¥¥（51〜100元）", genre:"洋食・バーガー" },
+    { type:"レストラン", name:"ダッフィー好朋友歓慶堂", area:"アドベンチャーアイル", icon:"🧸", cat:"restaurant", slug:"duffy-and-friends-celebration-hall", budget:"¥¥¥（101〜300元）", genre:"中華・軽食" },
+    { type:"レストラン", name:"バルボッサ・バーベキュー", area:"トレジャーコーブ", icon:"🍖", cat:"restaurant", slug:"barbossas-bounty", budget:"¥¥（51〜100元）", genre:"洋食・中華（BBQ）" },
+    { type:"レストラン", name:"船長小灶", area:"トレジャーコーブ", icon:"🦀", cat:"restaurant", slug:"captain-s-kettle", budget:"¥¥（51〜100元）", genre:"スナック・アイス" },
+    { type:"レストラン", name:"花栗鼠小厨", area:"アドベンチャーアイル", icon:"🐿️", cat:"restaurant", slug:"chipmunk-snacks", budget:"¥¥（51〜100元）", genre:"洋食・スナック" },
+    { type:"レストラン", name:"ミッキー好朋友美味市場", area:"ミッキーアベニュー", icon:"🥪", cat:"restaurant", slug:"mickey-pals-market-cafe", budget:"¥¥¥（101〜300元）", genre:"アジア料理・軽食" },
+    { type:"レストラン", name:"苺くまベントー", area:"トイストーリーランド", icon:"🍱", cat:"restaurant", slug:"andys-backyard-games-food-kiosk", budget:"¥¥（51〜100元）", genre:"洋食・軽食" },
+    { type:"レストラン", name:"ズートピア・フードマーケット", area:"ズートピア", icon:"🌮", cat:"restaurant", slug:"zootopia-market", budget:"¥¥（51〜100元）", genre:"アイス・売店" },
+    { type:"レストラン", name:"花間美味", area:"ガーデンズオブイマジネーション", icon:"🍡", cat:"restaurant", slug:"picnic-basket", budget:"¥¥（51〜100元）", genre:"アイス・軽食" },
+  ];
+  function attractionUrl(a){
+    const cat = a.cat || "attraction";
+    return `${SITE}/${cat}/${a.slug}`;
+  }
+
+  // minutes配列は https://urtrip.jp/shanghai-disneyland-attraction-waitingtime-data/
+  // が公開している15分刻みの実測待ち時間データ（直近の記録日ぶん）を基に、
+  // 各1時間帯（8-9,9-10,...,20-21）内の4スロット（:00/:15/:30/:45）の実測待ち時間(分)を
+  // 平均し四捨五入した値。データが存在しないスロットはnullとして除外して平均。
+  // 全スロットがnullのアトラクションはminutes配列がすべてnull＝そのデータソースでは未追跡。
+  // starは⭐必見マーク（tab1のカードと連動する固定情報。手を加えない）
+  const CONGESTION = {
+    labels:["8-9","9-10","10-11","11-12","12-13","13-14","14-15","15-16","16-17","17-18","18-19","19-20","20-21"],
+    rows:[
+      { name:"トロン・ライトサイクル・パワー・ラン", star:true, tip:"一番混む",
+        minutes:[25,56,63,70,68,73,76,66,80,78,85,86,55] },
+      { name:"ソアリン・オーバー・ザ・ホライズン", star:false,
+        minutes:[15,40,53,56,54,53,56,55,48,54,49,39,26] },
+      { name:"カリブの海賊：バトル・フォー・ザ・サンケン・トレジャー", star:true,
+        minutes:[6,16,28,29,31,29,25,24,23,24,20,15,10] },
+      { name:"七人のこびとのマイントレイン", star:true,
+        minutes:[40,66,78,76,76,78,75,70,74,75,71,63,49] },
+      { name:"ロアリング・ラピッド", star:true, tip:"水濡れ系は午前中の方が快適",
+        minutes:[9,23,28,34,30,36,36,36,35,35,31,19,15] },
+      { name:"レックスのレーサー（RCレーサー）", star:true,
+        minutes:[7,33,56,60,65,68,74,71,78,81,79,66,46] },
+      { name:"ズートピア：ホット・パースート", star:true,
+        // 日別の振れ幅が特に大きいアトラクション（直近2週間の日別平均は30〜80分）
+        minutes:[34,56,64,60,56,58,54,48,45,49,45,38,28] },
+      { name:"ビカム・アイアンマン（マーベル・ユニバース内）", star:false,
+        minutes:[null,5,10,10,10,10,10,10,10,10,10,10,10] },
+      { name:"ピーターパン空の旅", star:true,
+        minutes:[5,9,19,24,28,24,33,29,24,33,31,25,18] },
+      { name:"スペースチャット・ウィズ・スティッチ", star:false,
+        minutes:[null,null,null,null,15,15,15,15,15,15,15,null,null] },
+      { name:"バズ・ライトイヤー・プラネット・レスキュー", star:false,
+        minutes:[5,5,5,9,8,10,10,10,10,10,10,10,5] },
+      { name:"晶彩奇航（ヴォヤッジ・トゥ・ザ・クリスタル・グロット）", star:true,
+        minutes:[5,9,10,13,10,11,13,13,13,15,24,30,18] },
+      { name:"スリンキー・ドッグ・スピン", star:true,
+        minutes:[5,11,24,24,25,26,31,29,30,34,34,29,24] },
+      { name:"くまのプーさんの冒険", star:false,
+        minutes:[8,18,34,35,35,31,35,30,25,33,30,28,18] },
+      { name:"空飛ぶダンボ", star:false,
+        minutes:[5,20,29,33,26,26,30,29,30,38,38,39,null] },
+      { name:"ファンタジア・カルーセル", star:false,
+        minutes:[5,10,13,14,10,10,10,13,13,16,25,28,24] },
+      { name:"ウッディのラウンドアップ", star:false,
+        minutes:[8,18,35,33,43,36,44,40,41,50,45,40,31] },
+      { name:"ジェットパックス", star:true,
+        minutes:[6,18,29,29,28,30,38,35,44,41,45,41,31] },
+      { name:"ハニーポット・スピン", star:false,
+        minutes:[6,10,19,23,23,21,25,18,18,28,33,26,15] },
+      { name:"エクスプローラーズ・カヌー", star:false,
+        minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
+      { name:"エクスプローラーズ・キャンプ ロープチャレンジ", star:true,
+        // urtrip.jp側の「チャレンジ・トレイル・アット・キャンプ・ディスカバリー」に対応すると判断
+        minutes:[5,6,10,15,10,10,10,14,13,18,15,11,10] },
+      { name:"ピクサー・ワンダリング・ジャーニー（体験展示）", star:true,
+        // urtrip.jp側の「ピクサー・アドベンチャラス・ジャーニー」に対応すると判断
+        minutes:[null,null,5,5,5,5,5,5,5,5,5,null,null] },
+      { name:"マーベル・ユニバース", star:true,
+        // マーベル・ユニバース内の個別ミート＆グリートのデータはあるが、エリア全体の
+        // 体験展示としての待ち時間データはソースになし
+        minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
+      { name:"サイレンズ・リベンジ（難破船探検）", star:true,
+        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,5] },
+      { name:"シップレック・ショア（水遊び場）", star:false,
+        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,5] },
+      { name:"ジュニア・エクスプローラーズ・キャンプ（キッズ広場）", star:false,
+        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,5] },
+      { name:"ビスタ・トレイル（散策路）", star:false,
+        minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
+      { name:"ワンス・アポン・ア・タイム・アドベンチャー", star:true,
+        minutes:[5,5,5,5,8,5,5,8,10,10,10,10,9] },
+      { name:"エンチャンテッド・ストーリーブック・キャッスル（お城内見学）", star:false,
+        // ソースにある「エンチャンテッド・ストーリーブック・キャッスルでプリンセスとミート」は
+        // お城内の見学ではなくキャラクターグリーティングの待ち時間なので別物として扱い、データなし扱い
+        minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
+      { name:"アリス・イン・ワンダーランド・メイズ", star:true,
+        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,null] },
+      { name:"トロン・レルム（デジタルチャレンジ）", star:false,
+        minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
+    ]
+  };
+  // 待ち時間の絶対値で色分け（全アトラクション共通の目盛り）。
+  // 20分以下=空いている、45分以下=普通、それ以上=混雑。
+  const WAIT_LEVEL_CUTOFFS = { lv1: 20, lv2: 45 };
+  function waitLevel(m){
+    if(m<=WAIT_LEVEL_CUTOFFS.lv1) return 1;
+    if(m<=WAIT_LEVEL_CUTOFFS.lv2) return 2;
+    return 3;
+  }
+
+  const STORAGE_KEY = "sdl_schedule_v1";
+
+  // ---------- タブ切り替え ----------
+  document.querySelectorAll(".tab-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  // ---------- タブ1: フィルター & カード ----------
+  const areaSel = document.getElementById("filterArea");
+  const typeSel = document.getElementById("filterType");
+  const cardList = document.getElementById("cardList");
+
+  [...new Set(ATTRACTIONS.map(a=>a.area))].forEach(area=>{
+    const opt = document.createElement("option");
+    opt.value = area; opt.textContent = area;
+    areaSel.appendChild(opt);
+  });
+
+  const TYPE_ICON = { "ライド":"🎢", "ショー":"🎭", "レストラン":"🍽️" };
+
+  function renderCards(){
+    const area = areaSel.value, type = typeSel.value;
+    const filtered = ATTRACTIONS.filter(a=>
+      (area==="all"||a.area===area) && (type==="all"||a.type===type)
+    );
+    cardList.innerHTML = filtered.map(a=>`
+      <div class="card">
+        <div class="card-thumb">
+          <img src="assets/attractions/${a.slug}.jpg" alt="${a.name}"
+               onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'${a.icon}'}))">
+        </div>
+        <div class="card-body">
+          <div class="card-head">
+            <h4><a href="${attractionUrl(a)}" target="_blank" rel="noopener">${a.name}</a></h4>
+            <span class="badge">${a.area}</span>
+          </div>
+          <div class="card-meta">
+            <span class="chip chip-${a.type}">${TYPE_ICON[a.type]} ${a.type}</span>
+            ${a.type==="レストラン" ? `<span class="chip">💰 ${a.budget}</span><span class="chip">🍴 ${a.genre}</span>` : ""}
+            ${a.type==="ショー" ? `<span class="chip">🕒 ${a.showtime}</span>` : ""}
+          </div>
+        </div>
+      </div>
+    `).join("") || `<p class="empty-msg">該当する項目がありません</p>`;
+  }
+  areaSel.addEventListener("change", renderCards);
+  typeSel.addEventListener("change", renderCards);
+  renderCards();
+
+  // ---------- タブ2: 混雑傾向表 ----------
+  const congestionTable = document.getElementById("congestionTable");
+  function renderCongestion(){
+    let html = "<tr><th>アトラクション</th>" + CONGESTION.labels.map(l=>`<th>${l}</th>`).join("") + "</tr>";
+    CONGESTION.rows
+      .filter(r=>r.minutes.some(m=>m!==null))
+      .slice()
+      .sort((a,b)=> (b.star - a.star))
+      .forEach(r=>{
+      html += `<tr><td>${r.star?"⭐ ":""}${r.name}</td>` + r.minutes.map(m=>{
+        if(m===null){
+          return `<td class="lv-nodata">－</td>`;
+        }
+        const cls = "lv" + waitLevel(m);
+        return `<td class="${cls}">${m}</td>`;
+      }).join("") + "</tr>";
+    });
+    congestionTable.innerHTML = html;
+  }
+  renderCongestion();
+
+  // ---------- タブ3: スケジュール表 ----------
+  const scheduleBody = document.getElementById("scheduleBody");
+
+  function loadSchedule(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function saveSchedule(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(schedule));
+  }
+
+  let schedule = loadSchedule();
+  if(schedule.length===0){
+    schedule = [{ id: Date.now()+"-0", time:"", activity:"" }];
+  }
+
+  function addRow(){
+    schedule.push({ id: Date.now() + Math.random().toString(16).slice(2), time:"", activity:"" });
+    saveSchedule();
+    renderSchedule();
+    const inputs = scheduleBody.querySelectorAll("tr:last-child input");
+    if(inputs[0]) inputs[0].focus();
+  }
+
+  function removeRow(id){
+    schedule = schedule.filter(r=>r.id!==id);
+    if(schedule.length===0){ schedule.push({ id: Date.now()+"-0", time:"", activity:"" }); }
+    saveSchedule();
+    renderSchedule();
+  }
+
+  function updateRow(id, field, value){
+    const row = schedule.find(r=>r.id===id);
+    if(row){ row[field]=value; saveSchedule(); }
+  }
+
+  function escapeAttr(s){ return (s||"").replace(/"/g,"&quot;"); }
+
+  function renderSchedule(){
+    scheduleBody.innerHTML = schedule.map(r=>`
+      <tr data-id="${r.id}" draggable="true">
+        <td><span class="drag-handle" title="ドラッグして並び替え">⠿</span></td>
+        <td><input type="text" data-field="time" data-id="${r.id}" value="${escapeAttr(r.time)}" placeholder="9:00"></td>
+        <td><input type="text" data-field="activity" data-id="${r.id}" value="${escapeAttr(r.activity)}" placeholder="例：トロン・ライトサイクル・パワー・ラン"></td>
+        <td><button class="del-btn" data-action="del" data-id="${r.id}">×</button></td>
+      </tr>
+    `).join("");
+  }
+
+  scheduleBody.addEventListener("input", (e)=>{
+    const t = e.target;
+    if(t.dataset.field){ updateRow(t.dataset.id, t.dataset.field, t.value); }
+  });
+  scheduleBody.addEventListener("click", (e)=>{
+    if(e.target.dataset.action==="del"){ removeRow(e.target.dataset.id); }
+  });
+
+  // ---- 行のドラッグ&ドロップ並び替え ----
+  let dragId = null;
+
+  scheduleBody.addEventListener("dragstart", (e)=>{
+    const tr = e.target.closest("tr");
+    if(!tr) return;
+    dragId = tr.dataset.id;
+    tr.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+  });
+
+  scheduleBody.addEventListener("dragend", (e)=>{
+    const tr = e.target.closest("tr");
+    if(tr) tr.classList.remove("dragging");
+    scheduleBody.querySelectorAll("tr.drag-over").forEach(row=>row.classList.remove("drag-over"));
+    dragId = null;
+  });
+
+  scheduleBody.addEventListener("dragover", (e)=>{
+    e.preventDefault();
+    const tr = e.target.closest("tr");
+    if(!tr || tr.dataset.id === dragId) return;
+    scheduleBody.querySelectorAll("tr.drag-over").forEach(row=>row.classList.remove("drag-over"));
+    tr.classList.add("drag-over");
+  });
+
+  scheduleBody.addEventListener("drop", (e)=>{
+    e.preventDefault();
+    const tr = e.target.closest("tr");
+    if(!tr || !dragId || tr.dataset.id === dragId) return;
+    const fromIdx = schedule.findIndex(r=>r.id===dragId);
+    const toIdx = schedule.findIndex(r=>r.id===tr.dataset.id);
+    if(fromIdx===-1 || toIdx===-1) return;
+    const [moved] = schedule.splice(fromIdx,1);
+    schedule.splice(toIdx,0,moved);
+    saveSchedule();
+    renderSchedule();
+  });
+
+  document.getElementById("addRowBtn").addEventListener("click", addRow);
+
+  renderSchedule();
+
+})();
+</script>
+</body>
+</html>
