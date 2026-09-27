@@ -170,45 +170,44 @@
   .lv3{ background:#ffe6ea; color:#c22a4d; font-weight:700;}
   .lv-nodata{ background:#f1f1f3; color:#9a9aa2; font-weight:400;}
 
-  .notion-table{
-    width:100%; border-collapse:collapse; background:var(--card); border-radius:var(--radius);
-    overflow:hidden; box-shadow:var(--shadow-card);
+  .timeline{
+    list-style:none; margin:0 0 20px; padding:0;
+    background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-card);
+    padding:16px 16px 16px 0;
   }
-  .notion-table th{
-    background:var(--blue-pale); color:var(--blue-deep); font-size:.75rem; font-weight:800;
-    text-align:left; padding:9px 10px; border-bottom:1px solid #d7e4fb;
+  .timeline li{
+    display:grid; grid-template-columns:72px 20px 1fr; column-gap:2px;
+    position:relative;
   }
-  .notion-table th.time-col{ width:90px; }
-  .notion-table th.del-col{ width:36px; }
-  .notion-table th.drag-col{ width:28px; }
-  .notion-table td{
-    border-bottom:1px solid #eef1f8; padding:0;
+  .timeline li:not(:last-child){ padding-bottom:18px; }
+  .timeline .t-time{
+    font-size:1.15rem; font-weight:800; color:var(--blue-deep); text-align:right;
+    padding-right:8px; white-space:nowrap; line-height:1.3;
   }
-  .drag-handle{
-    cursor:grab; color:#c9d3e6; text-align:center; user-select:none;
-    display:flex; align-items:center; justify-content:center; height:100%; padding:9px 4px;
+  .timeline .t-dot-col{ display:flex; flex-direction:column; align-items:center; }
+  .timeline .t-dot{
+    width:14px; height:14px; border-radius:50%; background:var(--yellow);
+    border:3px solid var(--blue); flex:none; margin-top:3px;
   }
-  .drag-handle:active{ cursor:grabbing; }
-  .notion-table tr.dragging{ opacity:.4; }
-  .notion-table tr.drag-over{ box-shadow:inset 0 2px 0 var(--blue); }
-  .notion-table input{
-    width:100%; border:none; background:transparent; padding:9px 10px; font-size:.85rem;
-    font-family:inherit; color:var(--text);
+  .timeline li:not(:last-child) .t-line{
+    flex:1; width:3px; background:var(--blue-pale); margin-top:2px;
   }
-  .notion-table input:focus{ outline:2px solid var(--blue-light); outline-offset:-2px; background:#fbfdff; }
-  .notion-table tr:hover{ background:#fafbff; }
-  .del-btn{
-    border:none; background:none; color:#c9d3e6; font-size:1rem; cursor:pointer; padding:6px;
-    width:100%;
+  .timeline .t-text{
+    font-size:1.05rem; font-weight:700; line-height:1.4; padding-bottom:2px;
   }
-  .del-btn:hover{ color:#c22a4d; }
+  .timeline .t-note{
+    font-size:.9rem; font-weight:600; color:var(--text); font-style:italic;
+    grid-column:1 / -1; padding:6px 0 4px 92px;
+  }
 
-  .add-row-btn{
-    width:100%; padding:12px; border-radius:0 0 14px 14px; border:none; border-top:1px solid #eef1f8;
-    background:var(--blue-pale); color:var(--blue); font-weight:800; font-size:.85rem; cursor:pointer;
-    margin-top:-2px;
-  }
   .empty-msg{ text-align:center; color:var(--gray); font-size:.85rem; padding:24px 0;}
+  .hours-banner{
+    background:linear-gradient(135deg,var(--blue-deep),var(--blue)); color:#fff;
+    font-size:1.05rem; font-weight:800; text-align:center;
+    padding:14px 12px; border-radius:var(--radius); margin-bottom:14px;
+    box-shadow:var(--shadow-card);
+  }
+  .hours-banner small{ display:block; font-size:.7rem; font-weight:600; opacity:.85; margin-top:4px; }
 </style>
 </head>
 <body>
@@ -250,6 +249,8 @@
 
   <!-- TAB2: 時間帯攻略 -->
   <section id="tab2" class="panel">
+    <p class="note">📐 このタブの待ち時間は、記録時点（9月下旬）の実測データを混雑指数33%相当と仮定し、11/6(金)の予想混雑指数57%（<a href="https://magic-tips.app/ja/konzatsu-calendar/shanghai-disney-resort/2026/11" target="_blank" rel="noopener">Magic Tips</a>調べ）に合わせて全体を57÷33倍にスケーリングした推定値です。実測ではなくあくまで概算なので、目安として見てください。</p>
+
     <div class="section-title">🌅 開園〜9:00頃：本当に空いている時間</div>
     <div class="time-block">
       <h4>🚀 最優先ターゲット（ピーク時<span id="tierTopCutoff"></span>分以上・ここで潰さないと1日中高止まり）</h4>
@@ -266,7 +267,7 @@
     <div class="time-block">
       <h4>✨ 閉園に向けて下がる時間帯</h4>
       <ul>
-        <li>実測では20時台に入ってようやく平均待ち時間が下がり始める（トロンで86→55分、七人のこびとで63→49分など）</li>
+        <li>19-20時台→20-21時台にかけて下がり始める（トロンで149→95分、七人のこびとで109→85分など）</li>
         <li>日中混んでいた人気ライドの再チャレンジ枠</li>
         <li>ライトアップされたお城・パーク全体の雰囲気</li>
         <li>花火・ナイトショー鑑賞のためのエリア確保</li>
@@ -286,18 +287,30 @@
 
   <!-- TAB3: スケジュール表（予定＋実績統合） -->
   <section id="tab3" class="panel">
-    <table class="notion-table">
-      <thead>
-        <tr>
-          <th class="drag-col"></th>
-          <th class="time-col">時刻</th>
-          <th>アトラクション</th>
-          <th class="del-col"></th>
-        </tr>
-      </thead>
-      <tbody id="scheduleBody"></tbody>
-    </table>
-    <button class="add-row-btn" id="addRowBtn">＋ 行を追加</button>
+    <div class="hours-banner">🕗 8:30開園〜21:00閉園<small>予想・公式発表前の目安です。10月に入ったら公式サイトで確定時刻を確認してください</small></div>
+
+    <div class="section-title">🗓️ 予定表（下書き）</div>
+    <ul class="timeline">
+      <li><span class="t-time">6:00</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">ホテル発？</span></li>
+      <li><span class="t-time">6:30</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">並び始める</span></li>
+      <li><span class="t-time">7:30</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">アーリー入場</span></li>
+      <li><span class="t-time">7:50</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">RCレーサー</span></li>
+      <li><span class="t-time">8:10</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">ウッディのラウンドアップ or スリンキードッグ</span></li>
+      <li><span class="t-time">8:40</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">ジェットパックス？</span></li>
+      <li><span class="t-time">9:10</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">ピーターパン空の旅</span></li>
+      <li><span class="t-time">9:40</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">カリブの海賊</span></li>
+      <li><span class="t-time">10:40</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">昼ごはん</span></li>
+      <li><span class="t-time">11:30</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">アドベンチャーアイル探索</span></li>
+      <li><span class="t-time">12:30</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">アリスやワンスなど散歩</span></li>
+      <li><span class="t-time">13:30</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">七人のこびと？（DPA）</span></li>
+      <li><span class="t-time">14:00</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">また散歩？ピクサー展？カリブのショー？</span></li>
+      <li><span class="t-time">15:00</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">トロン（DPA）</span></li>
+      <li><span class="t-time">16:00</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">ズートピア（Qラインみること考え通常？）</span></li>
+      <li><span class="t-time">18:00</span><span class="t-dot-col"><span class="t-dot"></span><span class="t-line"></span></span><span class="t-text">ヴォヤッジとか？</span>
+        <span class="t-note">～ちなみに実際はさらにショーとかもプラスでいくかもだし分かりまへん。～</span>
+      </li>
+      <li><span class="t-time">21:15</span><span class="t-dot-col"><span class="t-dot"></span></span><span class="t-text">イルミネイト！</span></li>
+    </ul>
   </section>
 
 </main>
@@ -381,72 +394,72 @@
     labels:["8-9","9-10","10-11","11-12","12-13","13-14","14-15","15-16","16-17","17-18","18-19","19-20","20-21"],
     rows:[
       { name:"トロン・ライトサイクル・パワー・ラン", star:true, tip:"一番混む",
-        minutes:[25,56,63,70,68,73,76,66,80,78,85,86,55] },
+        minutes:[43,97,109,121,117,126,131,114,138,135,147,149,95] },
       { name:"ソアリン・オーバー・ザ・ホライズン", star:false,
-        minutes:[15,40,53,56,54,53,56,55,48,54,49,39,26] },
+        minutes:[26,69,92,97,93,92,97,95,83,93,85,67,45] },
       { name:"カリブの海賊：バトル・フォー・ザ・サンケン・トレジャー", star:true,
-        minutes:[6,16,28,29,31,29,25,24,23,24,20,15,10] },
+        minutes:[10,28,48,50,54,50,43,41,40,41,35,26,17] },
       { name:"七人のこびとのマイントレイン", star:true,
-        minutes:[40,66,78,76,76,78,75,70,74,75,71,63,49] },
+        minutes:[69,114,135,131,131,135,130,121,128,130,123,109,85] },
       { name:"ロアリング・ラピッド", star:true, tip:"水濡れ系は午前中の方が快適",
-        minutes:[9,23,28,34,30,36,36,36,35,35,31,19,15] },
+        minutes:[16,40,48,59,52,62,62,62,60,60,54,33,26] },
       { name:"レックスのレーサー（RCレーサー）", star:true,
-        minutes:[7,33,56,60,65,68,74,71,78,81,79,66,46] },
+        minutes:[12,57,97,104,112,117,128,123,135,140,136,114,79] },
       { name:"ズートピア：ホット・パースート", star:true,
         // 日別の振れ幅が特に大きいアトラクション（直近2週間の日別平均は30〜80分）
-        minutes:[34,56,64,60,56,58,54,48,45,49,45,38,28] },
+        minutes:[59,97,111,104,97,100,93,83,78,85,78,66,48] },
       { name:"ビカム・アイアンマン（マーベル・ユニバース内）", star:false,
-        minutes:[null,5,10,10,10,10,10,10,10,10,10,10,10] },
+        minutes:[null,9,17,17,17,17,17,17,17,17,17,17,17] },
       { name:"ピーターパン空の旅", star:true,
-        minutes:[5,9,19,24,28,24,33,29,24,33,31,25,18] },
+        minutes:[9,16,33,41,48,41,57,50,41,57,54,43,31] },
       { name:"スペースチャット・ウィズ・スティッチ", star:false,
-        minutes:[null,null,null,null,15,15,15,15,15,15,15,null,null] },
+        minutes:[null,null,null,null,26,26,26,26,26,26,26,null,null] },
       { name:"バズ・ライトイヤー・プラネット・レスキュー", star:false,
-        minutes:[5,5,5,9,8,10,10,10,10,10,10,10,5] },
+        minutes:[9,9,9,16,14,17,17,17,17,17,17,17,9] },
       { name:"晶彩奇航（ヴォヤッジ・トゥ・ザ・クリスタル・グロット）", star:true,
-        minutes:[5,9,10,13,10,11,13,13,13,15,24,30,18] },
+        minutes:[9,16,17,22,17,19,22,22,22,26,41,52,31] },
       { name:"スリンキー・ドッグ・スピン", star:true,
-        minutes:[5,11,24,24,25,26,31,29,30,34,34,29,24] },
+        minutes:[9,19,41,41,43,45,54,50,52,59,59,50,41] },
       { name:"くまのプーさんの冒険", star:false,
-        minutes:[8,18,34,35,35,31,35,30,25,33,30,28,18] },
+        minutes:[14,31,59,60,60,54,60,52,43,57,52,48,31] },
       { name:"空飛ぶダンボ", star:false,
-        minutes:[5,20,29,33,26,26,30,29,30,38,38,39,null] },
+        minutes:[9,35,50,57,45,45,52,50,52,66,66,67,null] },
       { name:"ファンタジア・カルーセル", star:false,
-        minutes:[5,10,13,14,10,10,10,13,13,16,25,28,24] },
+        minutes:[9,17,22,24,17,17,17,22,22,28,43,48,41] },
       { name:"ウッディのラウンドアップ", star:false,
-        minutes:[8,18,35,33,43,36,44,40,41,50,45,40,31] },
+        minutes:[14,31,60,57,74,62,76,69,71,86,78,69,54] },
       { name:"ジェットパックス", star:true,
-        minutes:[6,18,29,29,28,30,38,35,44,41,45,41,31] },
+        minutes:[10,31,50,50,48,52,66,60,76,71,78,71,54] },
       { name:"ハニーポット・スピン", star:false,
-        minutes:[6,10,19,23,23,21,25,18,18,28,33,26,15] },
+        minutes:[10,17,33,40,40,36,43,31,31,48,57,45,26] },
       { name:"エクスプローラーズ・カヌー", star:false,
         minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
       { name:"エクスプローラーズ・キャンプ ロープチャレンジ", star:true,
         // urtrip.jp側の「チャレンジ・トレイル・アット・キャンプ・ディスカバリー」に対応すると判断
-        minutes:[5,6,10,15,10,10,10,14,13,18,15,11,10] },
+        minutes:[9,10,17,26,17,17,17,24,22,31,26,19,17] },
       { name:"ピクサー・ワンダリング・ジャーニー（体験展示）", star:true,
         // urtrip.jp側の「ピクサー・アドベンチャラス・ジャーニー」に対応すると判断
-        minutes:[null,null,5,5,5,5,5,5,5,5,5,null,null] },
+        minutes:[null,null,9,9,9,9,9,9,9,9,9,null,null] },
       { name:"マーベル・ユニバース", star:true,
         // マーベル・ユニバース内の個別ミート＆グリートのデータはあるが、エリア全体の
         // 体験展示としての待ち時間データはソースになし
         minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
       { name:"サイレンズ・リベンジ（難破船探検）", star:true,
-        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,5] },
+        minutes:[9,9,9,9,9,9,9,9,9,9,9,9,9] },
       { name:"シップレック・ショア（水遊び場）", star:false,
-        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,5] },
+        minutes:[9,9,9,9,9,9,9,9,9,9,9,9,9] },
       { name:"ジュニア・エクスプローラーズ・キャンプ（キッズ広場）", star:false,
-        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,5] },
+        minutes:[9,9,9,9,9,9,9,9,9,9,9,9,9] },
       { name:"ビスタ・トレイル（散策路）", star:false,
         minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
       { name:"ワンス・アポン・ア・タイム・アドベンチャー", star:true,
-        minutes:[5,5,5,5,8,5,5,8,10,10,10,10,9] },
+        minutes:[9,9,9,9,14,9,9,14,17,17,17,17,16] },
       { name:"エンチャンテッド・ストーリーブック・キャッスル（お城内見学）", star:false,
         // ソースにある「エンチャンテッド・ストーリーブック・キャッスルでプリンセスとミート」は
         // お城内の見学ではなくキャラクターグリーティングの待ち時間なので別物として扱い、データなし扱い
         minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
       { name:"アリス・イン・ワンダーランド・メイズ", star:true,
-        minutes:[5,5,5,5,5,5,5,5,5,5,5,5,null] },
+        minutes:[9,9,9,9,9,9,9,9,9,9,9,9,null] },
       { name:"トロン・レルム（デジタルチャレンジ）", star:false,
         minutes:[null,null,null,null,null,null,null,null,null,null,null,null,null] },
     ]
@@ -459,8 +472,6 @@
     if(m<=WAIT_LEVEL_CUTOFFS.lv2) return 2;
     return 3;
   }
-
-  const STORAGE_KEY = "sdl_schedule_v1";
 
   // ---------- タブ切り替え ----------
   document.querySelectorAll(".tab-btn").forEach(btn=>{
@@ -563,108 +574,6 @@
     document.getElementById("tierAnyTitle").textContent = `🕐 いつ行ってもOK（時間帯を気にしなくて良い${any.length}件）`;
   }
   renderTimeTiers();
-
-  // ---------- タブ3: スケジュール表 ----------
-  const scheduleBody = document.getElementById("scheduleBody");
-
-  function loadSchedule(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }catch(e){ return []; }
-  }
-  function saveSchedule(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(schedule));
-  }
-
-  let schedule = loadSchedule();
-  if(schedule.length===0){
-    schedule = [{ id: Date.now()+"-0", time:"", activity:"" }];
-  }
-
-  function addRow(){
-    schedule.push({ id: Date.now() + Math.random().toString(16).slice(2), time:"", activity:"" });
-    saveSchedule();
-    renderSchedule();
-    const inputs = scheduleBody.querySelectorAll("tr:last-child input");
-    if(inputs[0]) inputs[0].focus();
-  }
-
-  function removeRow(id){
-    schedule = schedule.filter(r=>r.id!==id);
-    if(schedule.length===0){ schedule.push({ id: Date.now()+"-0", time:"", activity:"" }); }
-    saveSchedule();
-    renderSchedule();
-  }
-
-  function updateRow(id, field, value){
-    const row = schedule.find(r=>r.id===id);
-    if(row){ row[field]=value; saveSchedule(); }
-  }
-
-  function escapeAttr(s){ return (s||"").replace(/"/g,"&quot;"); }
-
-  function renderSchedule(){
-    scheduleBody.innerHTML = schedule.map(r=>`
-      <tr data-id="${r.id}" draggable="true">
-        <td><span class="drag-handle" title="ドラッグして並び替え">⠿</span></td>
-        <td><input type="text" data-field="time" data-id="${r.id}" value="${escapeAttr(r.time)}" placeholder="9:00"></td>
-        <td><input type="text" data-field="activity" data-id="${r.id}" value="${escapeAttr(r.activity)}" placeholder="例：トロン・ライトサイクル・パワー・ラン"></td>
-        <td><button class="del-btn" data-action="del" data-id="${r.id}">×</button></td>
-      </tr>
-    `).join("");
-  }
-
-  scheduleBody.addEventListener("input", (e)=>{
-    const t = e.target;
-    if(t.dataset.field){ updateRow(t.dataset.id, t.dataset.field, t.value); }
-  });
-  scheduleBody.addEventListener("click", (e)=>{
-    if(e.target.dataset.action==="del"){ removeRow(e.target.dataset.id); }
-  });
-
-  // ---- 行のドラッグ&ドロップ並び替え ----
-  let dragId = null;
-
-  scheduleBody.addEventListener("dragstart", (e)=>{
-    const tr = e.target.closest("tr");
-    if(!tr) return;
-    dragId = tr.dataset.id;
-    tr.classList.add("dragging");
-    e.dataTransfer.effectAllowed = "move";
-  });
-
-  scheduleBody.addEventListener("dragend", (e)=>{
-    const tr = e.target.closest("tr");
-    if(tr) tr.classList.remove("dragging");
-    scheduleBody.querySelectorAll("tr.drag-over").forEach(row=>row.classList.remove("drag-over"));
-    dragId = null;
-  });
-
-  scheduleBody.addEventListener("dragover", (e)=>{
-    e.preventDefault();
-    const tr = e.target.closest("tr");
-    if(!tr || tr.dataset.id === dragId) return;
-    scheduleBody.querySelectorAll("tr.drag-over").forEach(row=>row.classList.remove("drag-over"));
-    tr.classList.add("drag-over");
-  });
-
-  scheduleBody.addEventListener("drop", (e)=>{
-    e.preventDefault();
-    const tr = e.target.closest("tr");
-    if(!tr || !dragId || tr.dataset.id === dragId) return;
-    const fromIdx = schedule.findIndex(r=>r.id===dragId);
-    const toIdx = schedule.findIndex(r=>r.id===tr.dataset.id);
-    if(fromIdx===-1 || toIdx===-1) return;
-    const [moved] = schedule.splice(fromIdx,1);
-    schedule.splice(toIdx,0,moved);
-    saveSchedule();
-    renderSchedule();
-  });
-
-  document.getElementById("addRowBtn").addEventListener("click", addRow);
-
-  renderSchedule();
 
 })();
 </script>
